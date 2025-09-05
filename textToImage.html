@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title>مولّد صورة نص</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Cairo", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .wrap { max-width: 900px; margin: 32px auto; padding: 16px; }
+    .card {
+      background: #111827;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    h1 { margin: 0 0 16px; font-size: 24px; font-weight: 800; }
+    textarea {
+      width: 100%; padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: inherit;
+      font-size: 16px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 12px;
+      border: none;
+      background: #22c55e;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    canvas {
+      margin-top: 20px;
+      width: 100%;
+      border-radius: 16px;
+      background: #8131a8; /* اللون الأساسي */
+    }
+    input[type="text"] {
+      width: 100%;
+      margin-top: 10px;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: inherit;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>حوِّل النص إلى صورة</h1>
+      <textarea id="text" rows="4" placeholder="اكتب هنا… مثال: مرحباً بالعالم!"></textarea>
+      <button id="generate">توليد الصورة</button>
+      <canvas id="preview" width="1280" height="720"></canvas>
+      <label>رابط الصورة (data URL)</label>
+      <input id="dataUrl" type="text" readonly />
+    </div>
+  </div>
+
+  <script>
+    const els = {
+      text: document.getElementById('text'),
+      preview: document.getElementById('preview'),
+      generate: document.getElementById('generate'),
+      dataUrl: document.getElementById('dataUrl'),
+    };
+
+    function drawTextImage(text) {
+      const c = els.preview;
+      const ctx = c.getContext('2d');
+
+      // خلفية بنفسجية
+      ctx.fillStyle = "#8131a8";
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      // النص أبيض
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "bold 45px 'Cairo', sans-serif";
+
+      // تقسيم الأسطر
+      const maxWidth = c.width - 100;
+      const words = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+
+      for (let word of words) {
+        const testLine = line ? line + " " + word : word;
+        const w = ctx.measureText(testLine).width;
+        if (w > maxWidth && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = testLine;
+        }
+      }
+      if (line) lines.push(line);
+
+      const lineHeight = 100;
+      const totalHeight = lines.length * lineHeight;
+      let y = c.height / 2 - totalHeight / 2 + lineHeight / 2;
+
+      for (let ln of lines) {
+        ctx.fillText(ln, c.width / 2, y);
+        y += lineHeight;
+      }
+    }
+
+    function generate() {
+      const text = els.text.value.trim() || "مرحباً! جرّب كتابة نصك هنا.";
+      drawTextImage(text);
+      els.dataUrl.value = els.preview.toDataURL("image/png");
+    }
+
+    els.generate.addEventListener("click", generate);
+
+    // رسم أولي
+    generate();
+  </script>
+</body>
+</html>
