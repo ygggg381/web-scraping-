@@ -27,7 +27,10 @@ export async function authorize() {
 
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: "offline",
-    scope: ["https://www.googleapis.com/auth/drive.file"],
+scope: [
+  "https://www.googleapis.com/auth/drive.file",
+  "https://www.googleapis.com/auth/blogger"
+],
   });
 
   console.log("Authorize this app by visiting this url:", authUrl);
