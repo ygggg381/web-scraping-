@@ -83,16 +83,16 @@ async function downloadImage(page, text, authorize) {
   
   try {
     var auth = await authorize();
-  } catch (err) {
-    console.log("Authorization error:", err);
+  } catch {
+    console.log("Authorization error");
     return ;
   }
 
   const filePath = await MakeiMG(page, text);
-  if (!filePath) return null;
+  if (!filePath) return ;
 
   const publicUrl = await uploadToDrive(auth, filePath);
-  if (!publicUrl) return null;
+  if (!publicUrl) return ;
 
   const IMG_Tag = `
 <div class="separator" style="clear: both;">
