@@ -6,7 +6,7 @@ async function publishToBlogger(title, content, img, authorize,label) {
     auth = await authorize();
   } catch (err) {
     console.log("Blogger Authorization failed:", err);
-    return null;
+    return ;
   }
 
   let blogger;
@@ -14,7 +14,7 @@ async function publishToBlogger(title, content, img, authorize,label) {
     blogger = google.blogger({ version: "v3", auth });
   } catch (err) {
     console.log("Failed to init Blogger API:", err);
-    return null;
+    return ;
   }
 
   const blogId = "8784583295316048833";
@@ -33,7 +33,7 @@ async function publishToBlogger(title, content, img, authorize,label) {
     });
   } catch (err) {
     console.log("Error publishing post:", err);
-    return null;
+    return ;
   }
 
   console.log("✅ Post published:", res.data.url);
