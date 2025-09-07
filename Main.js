@@ -41,14 +41,14 @@ let Article = async (page, url,label) => {
   }
 
   //article collection
-  let article =  await buildArticle(modified_components);
+  let article =   buildArticle(modified_components);
 
   if(!article){
     return;
   }
 
    const img = await image(page,modified_components.h1,authorize)
-   if(!article){
+   if(!img){
     return;
    }
 
