@@ -51,10 +51,43 @@ catch{
 for (const key of Object.keys(components)) {
   const value = components[key];
 
-  await safeRun(() => FillValue(page, value), "inputBox not found");
-  await safeRun(() => Click(page), "rewriteButton not found");
-  await safeRun(() => AddNewText(page, components, key), "newText not found");
-  await safeRun(() => EmptyTextArea(page), "can not empty textarea");
+  //Fill Input by value
+    try{  
+    await  FillValue(page, value);
+  }
+  catch{
+    console.log("inputBox not found");
+    return;
+}
+
+  //Click rewrite
+    try{  
+    await  Click(page);
+  }
+  catch{
+    console.log("rewriteButton not found");
+    return;
+}
+
+  //UPDATE components
+    try{  
+    await  AddNewText(page, components, key);
+  }
+  catch{
+    console.log("newText not found");
+    return;
+}
+
+
+  //EmptyTextArea
+    try{  
+    await  EmptyTextArea(page);
+  }
+  catch{
+    console.log("can not empty textarea");
+    return;
+}
+
 }
 
 
