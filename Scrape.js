@@ -25,15 +25,6 @@ let AddElements = async (elements,components) => {
 }
 
 
-async function safeRun(fn, errMsg) {
-  try {
-    return await fn();
-  } catch {
-    console.log(errMsg);
-    return;
-  }
-}
-
 async function scrapeArticle(page,url) {
   const components = {};
   
@@ -45,9 +36,31 @@ async function scrapeArticle(page,url) {
     return;
   }
 
-  await safeRun(() => AddTitle(page, components), "title not found");
-  let elements = await safeRun(() => getElements(page), "elements not found");
-  await safeRun(() => AddElements(elements, components), "elements can't able to add to components");
+    // ADD title 
+  try {
+    await AddTitle(page, components)
+  }   catch {
+    console.log("Title of article not found");
+    return;
+  }
+   
+  // GET elements
+    try {
+    var elements =  await getElements(page)
+  }   catch {
+    console.log("elements not found");
+    return;
+  }
+
+
+    // ADD elements
+    try {
+    await AddElements(elements, components)
+  }   catch {
+    console.log("elements can't able to add to components");
+    return;
+  }
+   
   
   return components;
 }
