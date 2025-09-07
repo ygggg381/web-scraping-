@@ -7,6 +7,7 @@ import image from "./image.js"
 import {authorize} from "./authorization.js";
 import fs from "fs";
 import isOnline from "is-online";
+import express from "express";
 
 
 let OpenBrowser = async () =>{
@@ -147,4 +148,18 @@ if(await isOnline()){
   }
 
   }}
-App()
+
+
+
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+  res.send("App is running 🚀");
+});
+
+app.listen(PORT, async () => {
+  console.log(`Server running on port ${PORT}`);
+  await App();
+});
